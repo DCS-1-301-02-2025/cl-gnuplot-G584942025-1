@@ -11,6 +11,7 @@
 
 ![前半で作成したグラフがここに入る](force.png)
 
+
 ## 2. 関数のプロット
 
 次の「みほん」の図と同じようになるように gnuplotの記述を追記せよ.
@@ -25,6 +26,18 @@
 
 ```gnuplot {cmd=true output="html"}
 set terminal svg
+f2(x) = x * log(x)
+reset
+set title "関数のプロット"
+set xlabel "x"
+set ylabel "y"
+set xrange [0:7]
+set yrange [-20:15]
+set grid
+set key outside
+f1(x) = 2*x**2*sqrt(x)-5*x**2
+f2(x) = x/log(x)
+plot f1(x) title "f1(x)", f2(x) title "f2(x)"
 
 ```
 
@@ -41,12 +54,17 @@ set terminal svg
 
 ![weather](weather2025.png)
 
-```gnuplot {cmd=true, output="html"}
+```gnuplot {cmd=true output="html"}
 set terminal svg
 set xdata time
 set timefmt '%Y/%m/%d'
 set xtics format "%m/%d"
-
+set datafile separator comma
+set title "八王子の気温（過去一年間）"
+set xlabel "日付"
+set ylabel "温度"
+set grid
+plot "weather2025.csv" using 1:2 w l title "最高気温" , "weather2025.csv" using 1:3 w l title "最高気温（平年）" , "weather2025.csv" using 1:4 w l title "最低気温" , "weather2025.csv" using 1:5 with lines title "最低気温（平年）" 
 ```
 
 ## 4． 誕生月
@@ -63,9 +81,15 @@ set xtics format "%m/%d"
 - x軸の目盛には「1月」のように月が入る
 - 格子状の補助線を入れる
 
-```gnuplot {cmd=true, output="html"}
+```gnuplot {cmd=true output="html"}
 set terminal svg
-unset key
-
-
-```
+set title "誕生日の月別人数"
+set ylabel "人"
+set yrange [0:16]
+set style fill solid 1.0 border -1
+set boxwidth 0.6
+set style data boxes
+set grid ytics
+# 月名ラベルを x 軸に表示
+set xtics ("1月" 1, "2月" 2, "3月" 3, "4月" 4, "5月" 5, "6月" 6, "7月" 7, "8月" 8, "9月" 9, "10月" 10, "11月" 11, "12月" 12)
+plot "bm.txt" using 1:2 lc rgb "skyblue" notitle
